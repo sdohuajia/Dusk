@@ -22,7 +22,7 @@ function start_node() {
 
     # 下载并运行 node-installer.sh
     echo "下载并运行 node-installer.sh..."
-    if ! curl --proto '=https' --tlsv1.2 -sSfL https://github.com/dusk-network/node-installer/releases/download/v0.3.2/node-installer.sh | sudo sh; then
+    if ! curl --proto '=https' --tlsv1.2 -sSfL https://github.com/dusk-network/node-installer/releases/download/v0.3.3/node-installer.sh | sudo sh; then
         echo "下载或运行 node-installer.sh 失败。"  # 错误信息
         exit 1
     fi
@@ -118,7 +118,7 @@ function main_menu() {
         echo "================================================================"
         echo "退出脚本，请按键盘 ctrl + C 退出即可"
         echo "请选择要执行的操作:"
-        echo "1. 启动节点（构建 Docker 镜像并运行容器）"
+        echo "1. 启动节点"
         echo "2. 查看区块高度"
         echo "3. 质押 Dusk"
         echo "4. 查看日志"
