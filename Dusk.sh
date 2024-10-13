@@ -27,7 +27,15 @@ function start_node() {
         exit 1
     fi
 
+    # 运行 ruskreset 命令
+    echo "运行 ruskreset..."
+    if ! ruskreset; then
+        echo "运行 ruskreset 失败。"  # 错误信息
+        exit 1
+    fi
+
     # 安装 Rust 和 Cargo
+    echo "安装 Rust 和 Cargo..."
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     source $HOME/.cargo/env
 
@@ -44,14 +52,59 @@ function start_node() {
     cd rusk/rusk-wallet || { echo "进入 rusk-wallet 目录失败。"; exit 1; }
     make install || { echo "安装失败。"; exit 1; }
 
+    # 提示用户导入助记词和输入钱包密码
+    echo "请确保以小写形式输入助记词，并输入钱包的密码。"
+
+    # 执行 rusk-wallet 命令
+    echo "执行 rusk-wallet..."
+    if ! ./rusk-wallet; then
+        echo "执行 rusk-wallet 失败。"  # 错误信息
+        exit 1
+    fi
+    echo "rusk-wallet 执行成功。"
+
+    # 启动 rusk 服务
+    echo "启动 rusk 服务..."
+    if ! service rusk start; then
+        echo "启动 rusk 服务失败。"  # 错误信息
+        exit 1
+    fi
+    echo "rusk 服务已成功启动。"
+}
+
+# 质押 Dusk 函数
+function stake_dusk() {
+    read -p "请输入质押金额（默认最低 1000 Dusk）: " amt
+    amt=${amt:-1000}  # 如果用户没有输入，则使用默认值 1000
+
+    if ! rusk-wallet moonlight-stake --amt "$amt"; then
+        echo "质押 Dusk 失败。"  # 错误信息
+        exit 1
+    fi
+    echo "成功质押 $amt Dusk。"
+}
+
+# 检查质押信息函数
+function check_stake_info() {
+    echo "检查质押信息..."
+    if ! rusk-wallet stake-info; then
+        echo "检查质押信息失败。"  # 错误信息
+        exit 1
+    fi
 }
 
 # 查看日志函数
 function view_logs() {
-    echo "查看日志..."
-    # 查看 Docker 容器的日志
-    if ! docker logs rusk_container; then
-        echo "查看日志失败，容器可能未运行。"  # 错误信息
+    echo "查看 rusk 日志..."
+    tail -F /var/log/rusk.log -n 50
+}
+
+# 查看区块高度函数
+function view_block_height() {
+    echo "查看区块高度..."
+    # 执行 ruskquery block-height 命令
+    if ! ruskquery block-height; then
+        echo "查看区块高度失败，命令可能未正确执行。"  # 错误信息
     fi
 }
 
@@ -66,8 +119,11 @@ function main_menu() {
         echo "退出脚本，请按键盘 ctrl + C 退出即可"
         echo "请选择要执行的操作:"
         echo "1. 启动节点（构建 Docker 镜像并运行容器）"
-        echo "2. 查看日志"
-        echo "3. 退出"
+        echo "2. 查看区块高度"
+        echo "3. 质押 Dusk"
+        echo "4. 查看日志"
+        echo "5. 检查质押信息"
+        echo "6. 退出"
         
         read -p "请输入选项: " choice
         case $choice in
@@ -75,9 +131,18 @@ function main_menu() {
                 start_node  # 调用启动节点函数
                 ;;
             2)
-                view_logs  # 调用查看日志函数
+                view_block_height  # 调用查看区块高度函数
                 ;;
             3)
+                stake_dusk  # 调用质押 Dusk 函数
+                ;;
+            4)
+                view_logs  # 调用查看日志函数
+                ;;
+            5)
+                check_stake_info  # 调用检查质押信息函数
+                ;;
+            6)
                 echo "退出脚本..."
                 exit 0
                 ;;
