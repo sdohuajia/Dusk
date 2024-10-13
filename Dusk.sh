@@ -62,10 +62,13 @@ function start_node() {
     echo "请确保以小写形式输入助记词，并输入钱包的密码。"
 
     # 执行 rusk-wallet 命令
+    echo "进入 rusk/rusk-wallet 目录..."
+    cd rusk/rusk-wallet || { echo "无法进入目录 rusk/rusk-wallet"; exit 1; }
+
     echo "执行 rusk-wallet..."
     if ! ./rusk-wallet; then
-        echo "执行 rusk-wallet 失败。"  # 错误信息
-        exit 1
+    echo "执行 rusk-wallet 失败。"  # 错误信息
+    exit 1
     fi
     echo "rusk-wallet 执行成功。"
 
