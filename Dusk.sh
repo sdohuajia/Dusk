@@ -15,7 +15,7 @@ function start_node() {
     
     # 更新系统并安装必要的软件包
     echo "更新系统并安装必要的软件包..."
-    if ! sudo apt update && sudo apt upgrade -y && sudo apt install curl iptables build-essential git wget lz4 jq make gcc nano automake autoconf tmux htop nvme-cli pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip libclang-dev -y; then
+    if ! sudo apt update && sudo apt upgrade -y && sudo apt install curl iptables build-essential git wget lz4 jq make gcc nano automake autoconf tmux htop nvme-cli pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip build-essential libclang-dev -y; then
         echo "安装软件包失败。"  # 错误信息
         exit 1
     fi
