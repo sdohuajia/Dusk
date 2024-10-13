@@ -35,9 +35,14 @@ function start_node() {
     fi
 
     # 安装 Rust 和 Cargo
-    echo "安装 Rust 和 Cargo..."
+    echo "检查是否已安装 Rust 和 Cargo..."
+    if ! command -v rustc &> /dev/null; then
+    echo "未检测到 Rust，正在安装 Rust 和 Cargo..."
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     source $HOME/.cargo/env
+    else
+    echo "Rust 和 Cargo 已安装，跳过安装。"
+    fi
 
     # 克隆 rusk 仓库
     echo "克隆 rusk 仓库..."
