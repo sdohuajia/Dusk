@@ -45,6 +45,12 @@ function start_node() {
     echo "Rust 和 Cargo 已安装，跳过安装。"
     fi
 
+    # 检查并删除 rusk 目录（如果存在）
+    if [ -d "rusk" ]; then
+    echo "rusk 目录已存在，正在删除..."
+    rm -rf rusk
+    fi
+
     # 克隆 rusk 仓库
     echo "克隆 rusk 仓库..."
     if ! git clone https://github.com/dusk-network/rusk.git; then
