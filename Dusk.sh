@@ -15,32 +15,21 @@ function start_node() {
     
     # 更新系统并安装必要的软件包
     echo "更新系统并安装必要的软件包..."
-    if ! sudo apt update && sudo apt upgrade -y && sudo apt install curl iptables build-essential git wget lz4 jq make gcc nano automake autoconf tmux htop nvme-cli pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip -y; then
+    if ! sudo apt update && sudo apt upgrade -y && sudo apt install curl iptables build-essential git wget lz4 jq make gcc nano automake autoconf tmux htop nvme-cli pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip libclang-dev -y; then
         echo "安装软件包失败。"  # 错误信息
         exit 1
     fi
 
-    # 检测 Docker 是否已安装
-    if ! command -v docker &> /dev/null
-    then
-        echo "Docker 未安装，正在安装 Docker..."
-
-        # 添加 Docker 的官方 GPG 密钥
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
-        # 添加 Docker 的稳定版仓库
-        sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-
-        # 再次更新包索引
-        sudo apt-get update
-
-        # 安装 Docker
-        sudo apt-get install -y docker-ce
-
-        echo "Docker 安装完成！"
-    else
-        echo "Docker 已安装，版本为: $(docker --version)"
+    # 下载并运行 node-installer.sh
+    echo "下载并运行 node-installer.sh..."
+    if ! curl --proto '=https' --tlsv1.2 -sSfL https://github.com/dusk-network/node-installer/releases/download/v0.3.2/node-installer.sh | sudo sh; then
+        echo "下载或运行 node-installer.sh 失败。"  # 错误信息
+        exit 1
     fi
+
+    # 安装 Rust 和 Cargo
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    source $HOME/.cargo/env
 
     # 克隆 rusk 仓库
     echo "克隆 rusk 仓库..."
@@ -51,24 +40,10 @@ function start_node() {
 
     echo "rusk 仓库克隆完成！"
 
-    # 进入 rusk 目录
-    cd rusk || { echo "进入 rusk 目录失败。"; exit 1; }
+    # 进入 rusk 目录并安装 rusk-wallet
+    cd rusk/rusk-wallet || { echo "进入 rusk-wallet 目录失败。"; exit 1; }
+    make install || { echo "安装失败。"; exit 1; }
 
-    # 构建 Docker 镜像
-    if ! docker build -t rusk .; then
-        echo "构建 Docker 镜像失败。"  # 错误信息
-        exit 1
-    fi
-
-    echo "Docker 镜像构建完成！"
-
-    # 运行 Docker 容器
-    if ! docker run -d --name rusk_container -p 9001:9000/udp -p 8081:8080/tcp rusk; then
-        echo "运行 Docker 容器失败。"  # 错误信息
-        exit 1
-    fi
-
-    echo "Docker 容器运行成功！"
 }
 
 # 查看日志函数
