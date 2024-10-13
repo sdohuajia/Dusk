@@ -40,6 +40,7 @@ function start_node() {
     echo "未检测到 Rust，正在安装 Rust 和 Cargo..."
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
     source $HOME/.cargo/env
+    export PATH="$HOME/.cargo/bin:$PATH"
     else
     echo "Rust 和 Cargo 已安装，跳过安装。"
     fi
