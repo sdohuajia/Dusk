@@ -84,6 +84,9 @@ function start_node() {
         exit 1
     fi
     echo "rusk 服务已成功启动。"
+
+    # 等待用户按任意键以返回主菜单
+    read -p "按任意键返回主菜单..."
 }
 
 # 质押 Dusk 函数
@@ -96,6 +99,9 @@ function stake_dusk() {
         exit 1
     fi
     echo "成功质押 $amt Dusk。"
+
+    # 等待用户按任意键以返回主菜单
+    read -p "按任意键返回主菜单..."
 }
 
 # 检查质押信息函数
@@ -111,6 +117,9 @@ function check_stake_info() {
 function view_logs() {
     echo "查看 rusk 日志..."
     tail -F /var/log/rusk.log -n 50
+
+    # 等待用户按任意键以返回主菜单
+    read -p "按任意键返回主菜单..."
 }
 
 # 查看区块高度函数
