@@ -64,10 +64,6 @@ function start_node() {
     cd rusk/rusk-wallet || { echo "进入 rusk-wallet 目录失败。"; exit 1; }
     make install || { echo "安装失败。"; exit 1; }
 
-    # 执行 rusk-wallet 命令
-    echo "进入 rusk/rusk-wallet 目录..."
-    cd rusk/rusk-wallet || { echo "无法进入目录 rusk/rusk-wallet"; exit 1; }
-
     # 执行 rusk-wallet
     rusk-wallet
 
