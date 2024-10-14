@@ -65,6 +65,7 @@ function start_node() {
     make install || { echo "安装失败。"; exit 1; }
 
     # 执行 rusk-wallet
+    cd rusk/rusk-wallet
     rusk-wallet
 
     # 执行给定钱包的共识密钥
