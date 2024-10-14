@@ -71,6 +71,12 @@ function start_node() {
     # 执行 rusk-wallet
     rusk-wallet
 
+    # 执行给定钱包的共识密钥
+    rusk-wallet export -d /opt/dusk/conf -n consensus.keys
+
+    # 为共识密钥创建加密，设置环境变量
+    sh /opt/dusk/bin/setup_consensus_pwd.sh
+
     # 启动 rusk 服务
     echo "启动 rusk 服务..."
     if ! service rusk start; then
