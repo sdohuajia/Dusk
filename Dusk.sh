@@ -37,18 +37,18 @@ function start_node() {
     # 安装 Rust 和 Cargo
     echo "检查是否已安装 Rust 和 Cargo..."
     if ! command -v rustc &> /dev/null; then
-    echo "未检测到 Rust，正在安装 Rust 和 Cargo..."
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-    source $HOME/.cargo/env
-    export PATH="$HOME/.cargo/bin:$PATH"
+        echo "未检测到 Rust，正在安装 Rust 和 Cargo..."
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        source $HOME/.cargo/env
+        export PATH="$HOME/.cargo/bin:$PATH"
     else
-    echo "Rust 和 Cargo 已安装，跳过安装。"
+        echo "Rust 和 Cargo 已安装，跳过安装。"
     fi
 
     # 检查并删除 rusk 目录（如果存在）
     if [ -d "rusk" ]; then
-    echo "rusk 目录已存在，正在删除..."
-    rm -rf rusk
+        echo "rusk 目录已存在，正在删除..."
+        rm -rf rusk
     fi
 
     # 克隆 rusk 仓库
@@ -109,6 +109,18 @@ function check_stake_info() {
     fi
 }
 
+# 查看收益函数
+function view_rewards() {
+    echo "查看收益..."
+    if ! rusk-wallet stake-info --reward; then
+        echo "查看收益失败。"  # 错误信息
+        exit 1
+    fi
+
+    # 等待用户按任意键以返回主菜单
+    read -p "按任意键返回主菜单..."
+}
+
 # 查看日志函数
 function view_logs() {
     echo "查看 rusk 日志..."
@@ -125,6 +137,9 @@ function view_block_height() {
     if ! ruskquery block-height; then
         echo "查看区块高度失败，命令可能未正确执行。"  # 错误信息
     fi
+
+    # 等待用户按任意键以返回主菜单
+    read -p "按任意键返回主菜单..."
 }
 
 # 主菜单函数
@@ -142,7 +157,8 @@ function main_menu() {
         echo "3. 质押 Dusk"
         echo "4. 查看日志"
         echo "5. 检查质押信息"
-        echo "6. 退出"
+        echo "6. 查看收益"
+        echo "7. 退出"
         
         read -p "请输入选项: " choice
         case $choice in
@@ -162,6 +178,9 @@ function main_menu() {
                 check_stake_info  # 调用检查质押信息函数
                 ;;
             6)
+                view_rewards  # 调用查看收益函数
+                ;;
+            7)
                 echo "退出脚本..."
                 exit 0
                 ;;
