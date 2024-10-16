@@ -142,6 +142,22 @@ function view_block_height() {
     read -p "按任意键返回主菜单..."
 }
 
+# 升级版本函数
+function upgrade_version() {
+    echo "升级版本到 0.3.4..."
+    # 升级版本
+    if ! curl --proto '=https' --tlsv1.2 -sSfL https://github.com/dusk-network/node-installer/releases/download/v0.3.4/node-installer.sh | sudo sh; then
+        echo "升级失败。"  # 错误信息
+        exit 1
+    fi
+    # 启动 rusk 服务
+    if ! service rusk start; then
+        echo "启动 rusk 服务失败。"  # 错误信息
+        exit 1
+    fi
+    echo "rusk 服务已成功启动。"
+}
+
 # 主菜单函数
 function main_menu() {
     while true; do
@@ -158,7 +174,8 @@ function main_menu() {
         echo "4. 查看日志"
         echo "5. 检查质押信息"
         echo "6. 查看收益"
-        echo "7. 退出"
+        echo "7. 升级版本到 0.3.4"
+        echo "8. 退出"
         
         read -p "请输入选项: " choice
         case $choice in
@@ -181,6 +198,9 @@ function main_menu() {
                 view_rewards  # 调用查看收益函数
                 ;;
             7)
+                upgrade_version  # 调用升级版本函数
+                ;;
+            8)
                 echo "退出脚本..."
                 exit 0
                 ;;
