@@ -22,7 +22,7 @@ function start_node() {
 
     # 下载并运行 node-installer.sh
     echo "下载并运行 node-installer.sh..."
-    if ! curl --proto '=https' --tlsv1.2 -sSfL https://github.com/dusk-network/node-installer/releases/download/v0.3.3/node-installer.sh | sudo sh; then
+    if ! curl --proto '=https' --tlsv1.2 -sSfL https://github.com/dusk-network/node-installer/releases/download/v0.3.4/node-installer.sh | sudo sh; then
         echo "下载或运行 node-installer.sh 失败。"  # 错误信息
         exit 1
     fi
