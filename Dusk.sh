@@ -144,7 +144,7 @@ function view_block_height() {
 
 # 升级版本函数
 function upgrade_version() {
-    echo "升级版本到 0.3.4..."
+    echo "升级版本到 0.3.5..."
     # 升级版本
     if ! curl --proto '=https' --tlsv1.2 -sSfL https://github.com/dusk-network/node-installer/releases/download/v0.3.5/node-installer.sh | sudo sh; then
         echo "升级失败。"  # 错误信息
