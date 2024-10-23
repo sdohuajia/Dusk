@@ -150,6 +150,14 @@ function upgrade_version() {
         echo "升级失败。"  # 错误信息
         exit 1
     fi
+
+    # 运行 ruskreset 命令
+    echo "运行 ruskreset..."
+    if ! ruskreset; then
+        echo "运行 ruskreset 失败。"  # 错误信息
+        exit 1
+    fi
+    
     # 启动 rusk 服务
     if ! service rusk start; then
         echo "启动 rusk 服务失败。"  # 错误信息
