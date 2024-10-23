@@ -174,7 +174,7 @@ function main_menu() {
         echo "4. 查看日志"
         echo "5. 检查质押信息"
         echo "6. 查看收益"
-        echo "7. 升级版本到 0.3.4"
+        echo "7. 升级版本到 0.3.5"
         echo "8. 退出"
         
         read -p "请输入选项: " choice
