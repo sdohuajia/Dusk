@@ -90,7 +90,7 @@ function stake_dusk() {
     read -p "请输入质押金额（默认最低 1000 Dusk）: " amt
     amt=${amt:-1000}  # 如果用户没有输入，则使用默认值 1000
 
-    if ! rusk-wallet moonlight-stake --amt "$amt"; then
+    if ! rusk-wallet stake --amt "$amt"; then
         echo "质押 Dusk 失败。"  # 错误信息
         exit 1
     fi
